@@ -1,0 +1,57 @@
+spring:
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${URL_CONN}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        hbm2ddl:
+          auto: none
+        temp:
+          use_jdbc_metadata_defaults: false
+
+  security:
+    oauth2:
+      client:
+        provider:
+          azure-ad:
+            authorization-uri: ${AUTHORIZATION_URI}
+            token-uri: ${TOKEN_URI}
+            jwk-set-uri: ${JWK_SET_URI}
+        registration:
+          azure-client:
+            provider: ${PROVIDER}
+            tenant-id: ${TENANT_ID}
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            authorization-grant-type: ${AUTHORIZATION_GRANT_TYPE}
+            redirect-uri: ${REDIRECT_URI}
+            scope: ${SCOPE}
+  liquibase:
+    change-log: classpath:/db/changelog-master.xml
+
+server:
+  servlet:
+    context-path: /api
+  forward-headers-strategy: native
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_trace_param
+    include-exception: false
+
+activemq:
+  broker-url: ${BROKER-URL}
+
+  springdoc:
+    api-docs:
+      path: /api-docs

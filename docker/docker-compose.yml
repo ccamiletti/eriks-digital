@@ -1,0 +1,118 @@
+version: "3.3"
+
+services:
+  order-service:
+    build:
+      context: ../order-service
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    links:
+      - mysql
+      - activemq
+    restart: always
+    networks:
+      - eriks_network
+
+    environment:
+      AUTHORIZATION_URI: https://login.microsoftonline.com/8fdffe13-76f6-4e29-ac3e-afcd264ca6cc/oauth2/v2.0/authorize
+      TOKEN_URI: https://login.microsoftonline.com/8fdffe13-76f6-4e29-ac3e-afcd264ca6cc/oauth2/v2.0/token
+      JWK_SET_URI: https://login.microsoftonline.com/common/discovery/v2.0/keys
+      PROVIDER: azure-ad
+      TENANT_ID: 8fdffe13-76f6-4e29-ac3e-afcd264ca6cc
+      CLIENT_ID: 1608df86-1dc2-466c-a424-771c853c2abe
+      CLIENT_SECRET: .GJQ__9b8e5gx_ZlD-ILAKY1pT_60Ct58_
+      AUTHORIZATION_GRANT_TYPE: authorization_code
+      REDIRECT_URI: "http://localhost:8080/api/login/oauth2/code/azure"
+      SCOPE: openid
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      URL_CONN: jdbc:mysql://mysql:3306/eriks_db
+      BROKER-URL: tcp://activemq:61616
+    volumes:
+      - /data/order-service-container
+
+  order-consumer:
+    build:
+      context: ../order-consumer
+      dockerfile: Dockerfile
+    ports:
+      - 9000:8080
+    links:
+      - activemq
+    restart: always
+    networks:
+      - eriks_network
+    environment: 
+      BROKER-URL: tcp://activemq:61616  
+    volumes:
+      - /data/order-consumer-container
+
+  activemq:
+    image: webcenter/activemq:5.14.3
+    networks:
+      - eriks_network
+    ports:
+      # mqtt
+      - "1883:1883"
+      # amqp
+      - "5672:5672"
+      # ui
+      - "8161:8161"
+      # stomp
+      - "61613:61613"
+      # ws
+      - "61614:61614"
+      # jms
+      - "61616:61616"
+    volumes:
+      [
+        "activemq-data:/opt/activemq/conf",
+        "activemq-data:/data/activemq",
+        "activemq-data:/var/log/activemq",
+      ]
+    environment:
+      ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: "true"
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: password
+      ACTIVEMQ_WRITE_LOGIN: write
+      ACTIVEMQ_WRITE_PASSWORD: password
+      ACTIVEMQ_READ_LOGIN: read
+      ACTIVEMQ_READ_PASSWORD: password
+      ACTIVEMQ_JMX_LOGIN: jmx
+      ACTIVEMQ_JMX_PASSWORD: password
+      ACTIVEMQ_ENABLED_SCHEDULER: "true"
+      ACTIVEMQ_MIN_MEMORY: 512
+      ACTIVEMQ_MAX_MEMORY: 2048      
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: eriks_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      URL_CONN: jdbc:mysql://mysql:3306/eriks_db
+    ports:
+      - 3306:3306
+    networks:
+      - eriks_network
+    volumes:
+      - ./db/order.sql.gz:/docker-entrypoint-initdb.d/data.sql.gz
+      - mysql_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    networks:
+      - eriks_network
+    links:
+      - mysql
+    ports:
+      - 8888:8080
+
+volumes:
+  mysql_data:
+  activemq-data:
+
+networks:
+  eriks_network:
