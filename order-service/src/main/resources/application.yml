@@ -2,9 +2,9 @@ spring:
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/eriks_db
-    username: admin
-    password: admin
+    url: ${URL_CONN}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
     show-sql: true
@@ -24,18 +24,18 @@ spring:
       client:
         provider:
           azure-ad:
-            authorization-uri: https://login.microsoftonline.com/8fdffe13-76f6-4e29-ac3e-afcd264ca6cc/oauth2/v2.0/authorize
-            token-uri: https://login.microsoftonline.com/8fdffe13-76f6-4e29-ac3e-afcd264ca6cc/oauth2/v2.0/token
-            jwk-set-uri: https://login.microsoftonline.com/common/discovery/v2.0/keys
+            authorization-uri: ${AUTHORIZATION_URI}
+            token-uri: ${TOKEN_URI}
+            jwk-set-uri: ${JWK_SET_URI}
         registration:
           azure-client:
-            provider: azure-ad
-            tenant-id: 8fdffe13-76f6-4e29-ac3e-afcd264ca6cc
-            client-id: 1608df86-1dc2-466c-a424-771c853c2abe
-            client-secret: .GJQ__9b8e5gx_ZlD-ILAKY1pT_60Ct58_
-            authorization-grant-type: authorization_code
-            redirect-uri: 'http://localhost:8080/api/login/oauth2/code/azure'
-            scope: openid
+            provider: ${PROVIDER}
+            tenant-id: ${TENANT_ID}
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            authorization-grant-type: ${AUTHORIZATION_GRANT_TYPE}
+            redirect-uri: ${REDIRECT_URI}
+            scope: ${SCOPE}
   liquibase:
     change-log: classpath:/db/changelog-master.xml
 
@@ -50,7 +50,7 @@ server:
     include-exception: false
 
 activemq:
-  broker-url: tcp://localhost:61616
+  broker-url: ${BROKER-URL}
 
   springdoc:
     api-docs:
