@@ -38,7 +38,7 @@ And the code organize as this:
 
 Integration with Spring Security to implement Oauth2 using Azure.
 
-Everything about the description of the connection to Azure is stored in the file `application.yml`` and docker-compose.yml`.
+Everything about the description of the connection to Azure is stored in the file `application.yml` and `docker-compose.yml`.
 
 # Database
 
@@ -48,31 +48,19 @@ It uses a Mysql database, it is created and executed in a Docker container.
 
 Let's open a terminal, go to your_app_directory/docker and run `docker-compose up -d && docker-compose logs -f` (logs -f to see the log on order-consumer application)
 
-To see the documentation api, open a browser tab at http://localhost:8080/api/ .  
-Alternatively, you can run
+# Api Documentation
 
-    curl http://localhost:8080/tags
+To see the documentation api, open a browser tab at http://localhost:8080/api/swagger-ui/index.html. then, on the search bar type: `/api/v3/api-docs/`
 
-# Try it out with [Docker](https://www.docker.com/)
+# Try it out with Postman
 
-You need Docker installed.
+The entry point address of the backend API (order services) is at http://localhost:8080/api/order
 
-	docker-compose up -d
-
-# Try it out with a RealWorld frontend
-
-The entry point address of the backend API is at http://localhost:8080, **not** http://localhost:8080/api as some of the frontend documentation suggests.
-
-# Run test
-
-The repository contains a lot of test cases to cover both api test and repository test.
-
-    ./gradlew test
-
-# Use git pre-commit hook
-
-Follow the instruction from [google-java-format-git-pre-commit-hook](https://github.com/a1exsh/google-java-format-git-pre-commit-hook) to use a `pre-commit` hook to make the code format style stable from different contributors.
+###Getting Azure token 
+please, check docker-compose.yml file to get everything to login (clientId, client-secret etc...)
+   for more information, visit: https://docs.microsoft.com/en-us/rest/api/servicebus/get-azure-active-directory-token
+   
+FYI: Credentials available upon request.
 
 # Help
-
 Please fork and PR to improve the code.
