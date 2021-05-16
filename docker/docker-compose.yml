@@ -29,7 +29,7 @@ services:
       MYSQL_PASSWORD: admin
       URL_CONN: jdbc:mysql://mysql:3306/eriks_db
       BROKER-URL: tcp://activemq:61616
-      DISABLE_CSRF: false
+      DISABLE_CSRF: "false"
     volumes:
       - /data/order-service-container
 

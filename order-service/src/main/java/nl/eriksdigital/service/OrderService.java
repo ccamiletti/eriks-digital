@@ -67,12 +67,12 @@ public class OrderService {
         return orderRepository.findById(orderId).map(this::toDTO);
     }
 
-    public List<Order> findAll(long time) throws InterruptedException {
+    public List<Order> findAll(long timeOut) throws InterruptedException {
         List<Order> orderList = new ArrayList<>();
         orderRepository.findAll().forEach(o -> {
             orderList.add(toDTO(o));
         });
-        Thread.sleep(time);
+        Thread.sleep(timeOut);
         return orderList;
     }
 
