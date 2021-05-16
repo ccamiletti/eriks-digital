@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.validation.Valid;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -24,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         } else {
             http.authorizeRequests()
                     .antMatchers("/swagger-ui/**").permitAll()
+                    .antMatchers("/api/v3/api-docs").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .oauth2Login()
