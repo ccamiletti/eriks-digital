@@ -27,9 +27,7 @@ And the code organize as this:
 ## Order consumer
 The application order-consumer uses Spring boot (JMS).
 
-* Use the idea of Domain Driven Design to separate the business term and infrastruture term.
-
-And the code organize as this:
+The code organize as this:
 
 1. `Config` Everything about the connection to ActiveMQ
 2. `Consumer` It is a simple Java class, listening for messages from a queue in ActiveMQ
@@ -40,13 +38,28 @@ Integration with Spring Security to implement Oauth2 using Azure.
 
 Everything about the description of the connection to Azure is stored in the file `application.yml` and `docker-compose.yml`.
 
-# Database
-
-It uses a Mysql database, it is created and executed in a Docker container.
-
 # Getting started
 
 Let's open a terminal, go to your_app_directory/docker and run `docker-compose up -d && docker-compose logs -f` (logs -f to see the log on order-consumer application)
+
+# Database
+
+It uses a Mysql database, it is created and executed in a Docker container.
+1. http://localhost:8888/ to see the database scheme.
+2. Connection parameters:
+    * System: MySQL
+    * Server: mysql
+    * user: admin
+    * password: admin
+    * Database: eriks_db
+
+# Apache ActiveMQ
+
+It uses Apache ActiveMQ to send messages between different applications. It is created and executed in a Docker container.
+1. http://localhost:8161/admin/
+2. Connection parameters:
+    * user: admin
+    * password: password
 
 # Api Documentation
 
