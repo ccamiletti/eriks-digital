@@ -1,5 +1,7 @@
 package nl.eriksdigital.model;
 
+import lombok.Builder;
+
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -11,6 +13,16 @@ public class Order implements Serializable {
     private String status;
     private Double totalPrice;
     private Instant date;
+
+    public Order() {}
+
+    @Builder
+    public Order(Long id, String status, Double totalPrice, Instant date) {
+        this.id = id;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.date = date;
+    }
 
     public Long getId() {
         return id;

@@ -42,12 +42,12 @@ public class OrderController {
     @HystrixCommand(fallbackMethod = "fallBackGettingOrders", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
     })
-    public ResponseEntity<List<Order>> findAll(@RequestParam(name = "time", defaultValue = "1000") Integer time) {
+    public ResponseEntity<List<Order>> findAll(@RequestParam(name = "time", defaultValue = "0") Integer time) throws InterruptedException {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findAll(time));
     }
 
-    private ResponseEntity<List<Order>> fallBackGettingOrders() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<Order>());
+    private ResponseEntity<List<Order>> fallBackGettingOrders(Integer time) {
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(new ArrayList<Order>());
     }
 
     @GetMapping("/{id}")

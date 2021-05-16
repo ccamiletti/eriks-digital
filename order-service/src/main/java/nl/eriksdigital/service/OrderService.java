@@ -6,7 +6,6 @@ import nl.eriksdigital.model.Order;
 import nl.eriksdigital.model.OrderWrapper;
 import nl.eriksdigital.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +39,10 @@ public class OrderService {
     public void update(Order order, Long id) {
         orderRepository.findById(id).map((orderEntity) -> {
             order.setId(id);
-            OrderEntity orderRequest = toEntity(order);
-            if (!orderRequest.equals(orderEntity)) {
+            OrderEntity orderEntityRequest = toEntity(order);
+            if (!orderEntityRequest.equals(orderEntity)) {
                 Order orderOld = toDTO(orderEntity);
-                orderEntity.setDate(order.getDate());
-                orderEntity.setStatus(order.getStatus());
-                orderEntity.setTotalPrice(order.getTotalPrice());
-                orderRepository.save(orderEntity);
+                orderRepository.save(orderEntityRequest);
                 sendOrderMessage(order, orderOld);
             }
             return orderEntity;
@@ -71,16 +67,12 @@ public class OrderService {
         return orderRepository.findById(orderId).map(this::toDTO);
     }
 
-    public List<Order> findAll(Integer time) {
+    public List<Order> findAll(long time) throws InterruptedException {
         List<Order> orderList = new ArrayList<>();
         orderRepository.findAll().forEach(o -> {
             orderList.add(toDTO(o));
         });
-        try {
-            Thread.sleep(time);
-        } catch(Exception e) {
-
-        }
+        Thread.sleep(time);
         return orderList;
     }
 
