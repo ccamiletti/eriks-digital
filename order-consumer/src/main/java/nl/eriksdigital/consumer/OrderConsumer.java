@@ -1,4 +1,4 @@
-package nl.eriksdigital.listener;
+package nl.eriksdigital.consumer;
 
 import nl.eriksdigital.model.OrderWrapper;
 import org.slf4j.Logger;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class Consumer {
+public class OrderConsumer {
 
-    Logger logger = LoggerFactory.getLogger(Consumer.class);
+    Logger logger = LoggerFactory.getLogger(OrderConsumer.class);
 
     @JmsListener(destination = "order_queue")
     public void consume(OrderWrapper message) {
